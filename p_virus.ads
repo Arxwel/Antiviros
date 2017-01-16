@@ -35,6 +35,9 @@ procedure CreeVectVirus (f : in out file_type; nb : in integer; V :out TV_Virus)
 procedure AfficheVectVirus (V : in TV_Virus);
 -- {} => {Les valeurs du vecteur V sont affichees sur une ligne}
 
+function Pos2 (Coul : in T_Piece; Lig: in T_Lig; Col: in T_Col) return String;
+--{} => {Donne la position d'un T_piece en character}
+
 procedure AfficheGrille (V : in TV_Virus);
 -- {} => {Le contenu du vecteur V est affiche dans une grille symbolisee
 -- Les colonnes sont numerotees de A a G et les lignes sont numerotees de 1 a 7.
@@ -43,7 +46,9 @@ procedure AfficheGrille (V : in TV_Virus);
 --			le caractere 'B' = piece blanche fixe
 -- 			rien = pas une case}
 
---------------- Fonctions et procedures pour le jeu
+	
+
+----------------- Fonctions et procedures pour le jeu
 
 function Gueri (V : in TV_Virus) return Boolean;
 -- {} => {resultat = la piece rouge est prete a sortir (coin haut gauche)}
@@ -51,9 +56,15 @@ function Gueri (V : in TV_Virus) return Boolean;
 function Presente (V : in TV_Virus; Coul : in T_Piece) return Boolean;
 -- {} => {resultat =  la piece de couleur Coul appartient a V}
 
+function Libre (V : in TV_Virus; i : in T_Lig; j : in T_Col; Dir : in T_Direction) return boolean;
+-- {} => {resultat = indique si la case n'est pas occupée pour le deplacement que l'on veut effectuer}
+
 function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) return Boolean;
 -- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
 --                                             deplacee dans la direction Dir}
+
+procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction);
+-- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
 
 procedure Deplacement(V : in out TV_Virus; Coul : in T_Piece; Dir :in T_Direction);
 -- {la piece de couleur Coul peut etre deplacee dans la direction Dir} 
