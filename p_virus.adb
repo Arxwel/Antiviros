@@ -9,11 +9,11 @@ procedure CreeVectVirus (f : in out file_type; nb : in integer; V :out TV_Virus)
 -- => {V a ete initialise par lecture dans f de la partie de numero nb}
 
 piece : TR_Piece;
-config:integer:=1;
+config:integer:=1; 
  
 begin
 
-	for i in V'range(1) loop
+	for i in V'range(1) loop		--Initialisation du Vecteur à vide
 		for j in V'range(2) loop
 			V(i,j) := vide;
 		end loop;
@@ -24,7 +24,7 @@ begin
 	if not end_of_file(f) then	-- on teste si le vecteur est vide 
 		read(f,piece);
 		while config < nb loop	-- on avance jusqu'à la configuration désirée
-			if piece.couleur = T_Piece'value("rouge") then
+			if piece.couleur = T_Piece'value("rouge") then -- On compte les Configurations
 				read(f,piece);
 				config:= config+1;
 			end if;
@@ -64,7 +64,7 @@ begin
 
 	for i in V'range(1) loop
 		for j in V'range(2) loop
-			ecrire(T_Piece'image(V(i,j))); ecrire(" ");
+			ecrire(T_Piece'image(V(i,j))); ecrire(" ");  -- Affichage sur une ligne du contenu du vecteur, séparé par un espace
 		end loop;
 	A_la_ligne;
 	end loop;
@@ -83,13 +83,13 @@ begin
 		return "B";
 	else
 		if Coul = vide then
-			if (Character'Pos(Col) mod 2 = 0 and Lig mod 2 /=0) or (Character'Pos(Col) mod 2 /=0 and Lig mod 2 =0) then
+			if (Character'Pos(Col) mod 2 = 0 and Lig mod 2 /=0) or (Character'Pos(Col) mod 2 /=0 and Lig mod 2 =0) then -- Permet de mettre un caractère espace pour les cases interdites
 					return " ";
 			else
-					return ".";
+					return "."; -- Si la case n'est pas une case interdite mais est vide, on met un point.
 			end if;
 		else
-			S:= " " & Image(T_Piece'Pos(Coul));
+			S:= " " & Image(T_Piece'Pos(Coul)); -- Le T_Piece'Pos ajoutant un espace avant la valeur, on utilise une string intermédiaire pour le supprimer
 			return S(3..3);
 		end if;
 	end if;
@@ -115,10 +115,10 @@ begin
 
 	ecrire_ligne(" \  A B C D E F G");
 	ecrire("  \ =============");
-	for a in T_Lig'range loop
+	for a in T_Lig'range loop  -- On parcours le vecteur ligne par ligne
 		A_la_ligne;
 	  	ecrire(a); ecrire("|");
-		for j in T_col'range loop
+		for j in T_col'range loop -- Pour chaque ligne on écrit le contenu par colonne
 			 ecrire(" ");ecrire(Pos2(V(a,j), a, j));
 		end loop;
 	end loop;
@@ -132,7 +132,7 @@ end AfficheGrille;
 function Gueri (V : in TV_Virus) return Boolean is
 -- {} => {resultat = la piece rouge est prete a sortir (coin haut gauche)}
 begin
-	return (V(1,'A')=rouge);
+	return (V(1,'A')=rouge);  -- Si un bout de la pièce rouge est à la coordonnée (1,A), alors la partie est gagnée
 end Gueri;
 
 ----------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ end Gueri;
 function Presente (V : in TV_Virus; Coul : in T_Piece) return Boolean is
 -- {} => {resultat =  la piece de couleur Coul appartient a V}
 begin
-	if not (Coul = blanc or Coul = vide) then
+	if not (Coul = blanc or Coul = vide) then -- On traite seulement les pièces qui peuvent être déplacées		
 		for i in V'range(1) loop
 			for j in V'range(2) loop
 				if V(i,j) = Coul then
@@ -178,9 +178,8 @@ function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) ret
 begin
 	for i in V'range(1) loop
 		for j in V'range(2) loop
-			if V(i,j) = Coul then
-				
-				if not Libre(V, i, j, Dir) then
+			if V(i,j) = Coul then	
+				if not Libre(V, i, j, Dir) then  -- Si la case de destination n'est pas libre, on ne peut pas effectuer le déplacement
 					return false;
 				end if;
 			end if;
@@ -197,8 +196,8 @@ procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Directi
 Vnew : TV_Virus;
 begin
 	if dir=hg then
-		Vnew(i-1,T_Col'pred(j)) := V(i,j);
-		Vnew(i,j) := vide;
+		V(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
+		V(i,j) := vide;
 	elsif dir=bg then
 		V(i+1,T_Col'pred(j)) := V(i,j);
 		V(i,j) := vide;
