@@ -9,8 +9,8 @@ procedure CreeVectVirus (f : in out file_type; nb : in integer; V :out TV_Virus)
 -- => {V a ete initialise par lecture dans f de la partie de numero nb}
 
 piece : TR_Piece;
-config:integer:=1; 
- 
+config:integer:=1;  --Compteur de Configurations
+-- reset(f, in_file); -- f ouvert mais f- /= <> 
 begin
 
 	for i in V'range(1) loop		--Initialisation du Vecteur à vide
@@ -24,9 +24,9 @@ begin
 	if not end_of_file(f) then	-- on teste si le vecteur est vide 
 		read(f,piece);
 		while config < nb loop	-- on avance jusqu'à la configuration désirée
-			if piece.couleur = T_Piece'value("rouge") then -- On compte les Configurations
-				read(f,piece);
-				config:= config+1;
+			if piece.couleur = T_Piece'value("rouge") then -- On compte les Configurations. On sait qu'on arrive à la fin d'une quand on rencontre une pièce rouge
+				read(f,piece); -- On saute la deuxième sous-pièce rouge
+				config:= config+1; -- On incrémente le compteur
 			end if;
 			read(f,piece);
 		end loop;
@@ -36,7 +36,7 @@ begin
 			V(piece.ligne, piece.colonne):= piece.couleur;
 			read(f,piece);
 		end loop;
-		V(piece.ligne, piece.colonne):=piece.couleur;
+		V(piece.ligne, piece.colonne):=piece.couleur; -- On rajoute les deux pièces rouges qui n'ont pas été prises en compte par la boucle
 		read(f,piece);
 		V(piece.ligne, piece.colonne):=piece.couleur;
 	else	-- si le fichier est vide
