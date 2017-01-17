@@ -23,7 +23,7 @@ package p_virus is
 
 	---- type pour la direction des deplacements des pieces
 	type T_Direction is (bg, hg, bd, hd);
-	package p_Direction_IO is new p_enum(T_Direction); 
+	package p_Direction_IO is new p_enum(T_Direction);
 	
 	---- Exceptions
 		EX_Piece : exception;
@@ -60,15 +60,17 @@ function Gueri (V : in TV_Virus) return Boolean;
 function Presente (V : in TV_Virus; Coul : in T_Piece) return Boolean;
 -- {} => {resultat =  la piece de couleur Coul appartient a V}
 
-function Libre (V : in TV_Virus; i : in T_Lig; j : in T_Col; Dir : in T_Direction) return boolean;
--- {} => {resultat = indique si la case n'est pas occupée pour le deplacement que l'on veut effectuer}
+--function Libre (V : in TV_Virus; i : in T_Lig; j : in T_Col; Dir : in T_Direction) return boolean;
+---- {} => {resultat = indique si la case n'est pas occupée pour le deplacement que l'on veut effectuer}
+
+--function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) return Boolean;
+---- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
+----                                             deplacee dans la direction Dir}
 
 function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) return Boolean;
--- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
---                                             deplacee dans la direction Dir}
 
-procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction; Coul : in T_Piece ; Vnew: in out TV_Virus);
--- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
+--procedure MAJ (V : in out TV_Virus; Dir : in T_Direction; Vnew: in out TV_Virus);
+---- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
 
 procedure Deplacement(V : in out TV_Virus; Coul : in T_Piece; Dir :in T_Direction);
 -- {la piece de couleur Coul peut etre deplacee dans la direction Dir} 

@@ -153,105 +153,223 @@ begin
 
 end Presente;
 
-----------------------------------------------------------------------------------
-
-function Libre (V : in TV_Virus; i : in T_Lig; j : in T_Col; Dir : in T_Direction) return boolean is
--- {} => {resultat = indique si la case n'est pas occupée pour le deplacement que l'on veut effectuer}
-begin
-	if dir=hg then
-		return (not ((i = 1) or (j ='A'))) and then (V(i-1,T_Col'pred(j))=T_Piece'value("vide"));
-	elsif dir=bg then
-		return (not ((i = 7) or (j ='A'))) and then (V(i+1,T_Col'pred(j))=T_Piece'value("vide"));
-	elsif dir=bd then
-		return (not ((i = 7) or (j ='G'))) and then (V(i+1,T_Col'Succ(j))=T_Piece'value("vide"));
-	else 
-		return (not ((i = 1) or (j ='G'))) and then (V(i-1,T_Col'Succ(j))=T_Piece'value("vide"));
-	end if;
-end Libre;
-
-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 
 function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) return Boolean is
--- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
---                                             deplacee dans la direction Dir}
-
+---- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
+----                                             deplacee dans la direction Dir}
+continue: boolean;
+newi, i: integer:= V'first(1);
+newj, j :character;
 begin
-	for i in V'range(1) loop
-		for j in V'range(2) loop
-			if V(i,j) = Coul then	
-				if not Libre(V, i, j, Dir) then  -- Si la case de destination n'est pas libre, on ne peut pas effectuer le déplacement
-					return false;
+	continue:=true;	
+	while continue and i in V'range(1) loop
+		j:=V'first(2);
+		while continue and j in V'range(2) loop
+			if V(i,j)=Coul then
+				if Dir=hd then
+					newi:= i-1; newj:= T_Col'succ(j);
+				elsif Dir=bg then
+					newi:= i+1; newj:= T_Col'pred(j);
+				elsif Dir=hg then
+					newi:= i-1; newj:= T_Col'pred(j);
+				elsif Dir=bd then
+					newi:= i+1; newj:= T_Col'succ(j);
 				end if;
+				continue:=(newi in T_Lig and newj in T_Col) and then (((V(newi,newj))=vide) or (V(newi,newj)=Coul));
 			end if;
+			j:= Character'succ(j);
 		end loop;
+		i:=i+1;
 	end loop;
-	return true;
-
-end Possible;
-
-----------------------------------------------------------------------------------
-
-procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction; Coul: in T_Piece; Vnew: in out TV_Virus) is
--- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
-a:integer:=0;
-begin
-	if dir=hg then
-		Vnew(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
-		Vnew(i,j) := vide;
-		if (a>=1 and i>V'first(1) and j>V'first(2)) and then (v(i-1, T_Col'pred(j)) /= Coul) then
-			Vnew(i,j) := vide;
-		elsif a = 0 then
-			Vnew(i,j) := vide;
-		end if;
-		a:=a+1;
-	elsif dir=bg then
-		Vnew(i+1,T_Col'pred(j)) := V(i,j);
-		Vnew(i,j) := vide;
-		if (a>=1 and i<V'last(1) and j>V'first(2)) and then (v(i+1, T_Col'pred(j)) /= Coul) then
-			Vnew(i,j) := vide;
-		elsif a = 0 then
-			Vnew(i,j) := vide;
-		end if;
-		a:=a+1;
-	elsif dir=bd then		
-		Vnew(i+1,T_Col'succ(j)) := V(i,j);
-		Vnew(i,j) := vide;
-		if (a>=1 and i<V'last(1) and j<V'last(2)) and then (v(i+1, T_Col'succ(j)) /= Coul) then
-			Vnew(i,j) := vide;
-		elsif a = 0 then
-			Vnew(i,j) := vide;
-		end if;
-		a:=a+1;
-	else
-		Vnew(i-1,T_Col'succ(j)) := V(i,j);
-		Vnew(i,j) := vide;
-		if (a>=1 and i>V'first(1) and j<V'last(2)) and then (v(i-1, T_Col'succ(j)) /= Coul) then
-			Vnew(i,j) := vide;
-		elsif a = 0 then
-			Vnew(i,j) := vide;
-		end if;
-		a:=a+1;
-	end if;
-
-end MAJ;
+	return continue;
+			
+end possible;
 
 ----------------------------------------------------------------------------------
 
 procedure Deplacement(V : in out TV_Virus; Coul : in T_Piece; Dir :in T_Direction) is
 -- {la piece de couleur Coul peut etre deplacee dans la direction Dir} 
 --                                        => {V a ete mis a jour suite au deplacement}
-Vnew : TV_Virus :=V;
+--Vnew : TV_Virus;
+--begin
+--		for i in V'range(1) loop
+--			for j in V'range(2) loop
+--				if V(i,j) = Coul then
+--					Vnew(i,j):= Coul;
+--				end if;
+--			end loop;
+--		end loop;
+--		MAJ(V,Dir,
+--Vnew);
+--		--V:=Vnew;
 begin
+		
+	if dir=hg then
 		for i in V'range(1) loop
-			for j in V'range(2) loop
+			for j in reverse V'range(2) loop
 				if V(i,j) = Coul then
-					MAJ(V,i,j,Dir, Coul, Vnew);
+				V(i,j):=vide;
+				V(i-1,T_Col'pred(j)):=Coul;
 				end if;
 			end loop;
 		end loop;
-		V:=Vnew;
+		
+--		Vnew(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
+--		Vnew(i,j) := vide;
+
+	elsif dir=bg then
+		for i in reverse V'range(1) loop
+			for j in V'range(2) loop
+				if V(i,j) = Coul then
+				V(i,j):=vide;
+				V(i+1,T_Col'pred(j)):=Coul;
+				end if;
+			end loop;
+		end loop;
+--		Vnew(i+1,T_Col'pred(j)) := V(i,j);
+--		V(i,j) := vide;
+--		Vnew(i,j) := vide;
+
+	elsif dir=bd then
+		for i in reverse V'range(1) loop
+			for j in V'range(2) loop
+				if V(i,j) = Coul then
+				V(i,j):=vide;
+				V(i+1,T_Col'succ(j)):=Coul;
+				end if;
+			end loop;
+		end loop;		
+--		Vnew(i+1,T_Col'succ(j)) := V(i,j);
+--		
+--		Vnew(i,j) := vide;
+
+	else
+		for i in V'range(1) loop
+			for j in reverse V'range(2) loop
+				if V(i,j) = Coul then 
+				V(i,j):=vide;
+				V(i-1,T_Col'succ(j)):=Coul;
+				end if;
+			end loop;
+		end loop;
+	end if;
+
 end Deplacement;
 	
 
 end p_virus;
 
+
+
+
+
+
+--function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) return Boolean is
+-- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
+--                                             deplacee dans la direction Dir}
+
+--begin
+--	for i in V'range(1) loop
+--		for j in V'range(2) loop
+--			if V(i,j) = Coul then	
+--				if not Libre(V, i, j, Dir) then   Si la case de destination n'est pas libre, on ne peut pas effectuer le déplacement
+--					return false;
+--				end if;
+--			end if;
+--		end loop;
+--	end loop;
+--	return true;
+
+--end Possible;
+
+----------------------------------------------------------------------------------
+
+--procedure MAJ (V : in out TV_Virus; Dir : in T_Direction; Vnew: in out TV_Virus) is
+---- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
+--begin
+--	
+--	if dir=hg then
+--		for i in V'range(1) loop
+--			for j in reverse V'range(2) loop
+--				if V(i,j) = Coul then
+--				V(i,j):=vide;
+--				V(i-1,T_Col'pred(j)):=Coul;
+--				end if;
+--			end loop;
+--		end loop;
+--		
+----		Vnew(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
+----		Vnew(i,j) := vide;
+
+--	elsif dir=bg then
+--		for i in reverse V'range(1) loop
+--			for j in V'range(2) loop
+--				if V(i,j) = Coul then
+--				V(i,j):=vide;
+--				V(i+1,T_Col'pred(j)):=Coul;
+--				end if;
+--			end loop;
+--		end loop;
+----		Vnew(i+1,T_Col'pred(j)) := V(i,j);
+----		V(i,j) := vide;
+----		Vnew(i,j) := vide;
+
+--	elsif dir=bd then
+--		for i in V'range(1) loop
+--			for j in V'range(2) loop
+--				if V(i,j) = Coul then
+--				V(i,j):=vide;
+--				V(i+1,T_Col'succ(j)):=Coul;
+--				end if;
+--			end loop;
+--		end loop;		
+----		Vnew(i+1,T_Col'succ(j)) := V(i,j);
+----		
+----		Vnew(i,j) := vide;
+
+--	else
+--		for i in V'range(1) loop
+--			for j in reverse V'range(2) loop
+--				if V(i,j) = Coul then 
+--				V(i,j):=vide;
+--				V(i-1,T_Col'succ(j)):=Coul;
+--				end if;
+--			end loop;
+--		end loop;
+--	end if;
+
+--end MAJ;
+
+----------------------------------------------------------------------------------
+
+--function Libre (V : in TV_Virus; i : in T_Lig; j : in T_Col; Dir : in T_Direction) return boolean is
+---- {} => {resultat = indique si la case n'est pas occupée pour le deplacement que l'on veut effectuer}
+--Vnew: TV_Virus := V;
+--begin
+--	if dir=hg then
+--		if not ((i = 1) or (j ='A')) then
+--				Vnew(i,j):=vide;
+--				return Vnew(i-1,T_Col'pred(j))=vide;
+--				end if;
+--		return false;
+
+--	elsif dir=bg then
+--		if not ((i = 7) or (j ='A')) then
+--				Vnew(i,j):=vide;
+--				return V(i+1,T_Col'pred(j))=vide;
+--		end if;
+--		return false;
+--	elsif dir=bd then
+--		if not ((i = 7) or (j ='G')) then
+--			Vnew(i,j):=vide; 
+--			return V(i+1,T_Col'Succ(j))=vide;
+--		end if;
+--		return false;
+--	else 
+--		if not ((i = 1) or (j ='G')) then
+--		 return V(i-1,T_Col'Succ(j))=vide;
+--		end if;
+--		return false;
+--	end if;
+--end Libre;
