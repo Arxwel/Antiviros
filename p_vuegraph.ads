@@ -12,6 +12,6 @@ function Color (C: in T_Piece) return FL_PD_COL;
 --{} => {Renvoie la couleur en FL_PD_COL correspondant a la Couleur T_Piece fournie}
 
 procedure FenetrePartie(V : in out TV_Virus);
---{V initialise} => {Creation d'une fenetre de Partie avec les donnees de V }
+--{V initialise, InitialiserFenetres a deja ete fait} => {Creation d'une fenetre de Partie avec les donnees de V }
 end p_vuegraph;
 
