@@ -191,23 +191,48 @@ end Possible;
 
 ----------------------------------------------------------------------------------
 
-procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction) is
+procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction; Coul: in T_Piece; Vnew: in out TV_Virus) is
 -- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
-Vnew : TV_Virus;
+a:integer:=0;
 begin
 	if dir=hg then
-		V(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
-		V(i,j) := vide;
+		Vnew(i-1,T_Col'pred(j)) := V(i,j);  -- On déplace le morceau de pièce sur la nouvelle case
+		Vnew(i,j) := vide;
+		if (a>=1 and i>V'first(1) and j>V'first(2)) and then (v(i-1, T_Col'pred(j)) /= Coul) then
+			Vnew(i,j) := vide;
+		elsif a = 0 then
+			Vnew(i,j) := vide;
+		end if;
+		a:=a+1;
 	elsif dir=bg then
-		V(i+1,T_Col'pred(j)) := V(i,j);
-		V(i,j) := vide;
-	elsif dir=bd then
-		V(i+1,T_Col'succ(j)) := V(i,j);
-		V(i,j) := vide;
+		Vnew(i+1,T_Col'pred(j)) := V(i,j);
+		Vnew(i,j) := vide;
+		if (a>=1 and i<V'last(1) and j>V'first(2)) and then (v(i+1, T_Col'pred(j)) /= Coul) then
+			Vnew(i,j) := vide;
+		elsif a = 0 then
+			Vnew(i,j) := vide;
+		end if;
+		a:=a+1;
+	elsif dir=bd then		
+		Vnew(i+1,T_Col'succ(j)) := V(i,j);
+		Vnew(i,j) := vide;
+		if (a>=1 and i<V'last(1) and j<V'last(2)) and then (v(i+1, T_Col'succ(j)) /= Coul) then
+			Vnew(i,j) := vide;
+		elsif a = 0 then
+			Vnew(i,j) := vide;
+		end if;
+		a:=a+1;
 	else
-		V(i-1,T_Col'succ(j)) := V(i,j);
-		V(i,j) := vide;
+		Vnew(i-1,T_Col'succ(j)) := V(i,j);
+		Vnew(i,j) := vide;
+		if (a>=1 and i>V'first(1) and j<V'last(2)) and then (v(i-1, T_Col'succ(j)) /= Coul) then
+			Vnew(i,j) := vide;
+		elsif a = 0 then
+			Vnew(i,j) := vide;
+		end if;
+		a:=a+1;
 	end if;
+
 end MAJ;
 
 ----------------------------------------------------------------------------------
@@ -215,16 +240,16 @@ end MAJ;
 procedure Deplacement(V : in out TV_Virus; Coul : in T_Piece; Dir :in T_Direction) is
 -- {la piece de couleur Coul peut etre deplacee dans la direction Dir} 
 --                                        => {V a ete mis a jour suite au deplacement}
-
+Vnew : TV_Virus :=V;
 begin
 		for i in V'range(1) loop
 			for j in V'range(2) loop
 				if V(i,j) = Coul then
-					MAJ(V,i,j,Dir);
+					MAJ(V,i,j,Dir, Coul, Vnew);
 				end if;
 			end loop;
 		end loop;
-
+		V:=Vnew;
 end Deplacement;
 	
 

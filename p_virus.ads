@@ -24,6 +24,10 @@ package p_virus is
 	---- type pour la direction des deplacements des pieces
 	type T_Direction is (bg, hg, bd, hd);
 	package p_Direction_IO is new p_enum(T_Direction); 
+	
+	---- Exceptions
+		EX_Piece : exception;
+		EX_Dir : exception;
 
 --------------- Creation et Affichage de la grille
 
@@ -63,7 +67,7 @@ function Possible (V : in TV_Virus; Coul : in T_Piece; Dir : in T_Direction) ret
 -- {P appartient a la grille V} => {resultat = vrai si la piece de couleur Coul peut etre 
 --                                             deplacee dans la direction Dir}
 
-procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction);
+procedure MAJ (V : in out TV_Virus; i: in T_Lig; j: in T_Col; Dir : in T_Direction; Coul : in T_Piece ; Vnew: in out TV_Virus);
 -- {le deplacement doit être possible et la couleur doit être presente} => {met à jour V après déplacement}
 
 procedure Deplacement(V : in out TV_Virus; Coul : in T_Piece; Dir :in T_Direction);

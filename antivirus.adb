@@ -22,17 +22,29 @@ ecrire(Possible(V,rouge,hg));
 
 	While not Gueri(V) loop
 		ecrire("N° pièce à déplacer ? : (0 à 8)"); lire(pad);
+		if (pad > 8) or (pad < 0) then
+			Raise EX_Piece;
+		end if;
+			
 		ecrire("Direction du déplacement ? : (bg, hg, bd ou hd)"); lire(dp);
+
+		if not ((dp = "bg") or (dp = "hg") or (dp = "bd") or (dp ="hd")) then
+			Raise EX_Dir;
+		end if;
+
 		if Presente(V, T_Piece'Val(pad)) and then Possible(V, T_Piece'Val(pad), T_Direction'Value(dp)) then 
 			Deplacement(V, T_Piece'Val(pad), T_Direction'Value(dp));
+		else
+			ecrire("error");
 		end if;
 			AfficheGrille(V);
 	end loop; 
-
 	Close(f);
 exception 
-		when Constraint_Error =>
-							ecrire_ligne("T'es con, il faut que ça soit entre 0 et 8");
+			when Ex_Piece =>
+							ecrire_ligne("La valeur de la pièce doit être comprise 0 et 8");
+			when Ex_Dir =>
+							ecrire_ligne("Le déplacement doit être : hg ou hd ou bg ou bd");
 end antivirus;
 
 
