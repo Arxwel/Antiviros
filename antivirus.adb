@@ -30,7 +30,7 @@ begin
 		end if;
 
 		if Presente(V, T_Piece'Val(pad)) and then Possible(V, T_Piece'Val(pad), T_Direction'Value(dp)) then -- On teste si la pièce existe bien dans la grille
-															-- Et que le déplacement est possible
+																						-- Et que le déplacement est possible
 			Deplacement(V, T_Piece'Val(pad), T_Direction'Value(dp)); -- Si oui on effectue le déplacement
 		else
 			ecrire("Erreur, pièce inexistante dans la grille ou le déplacement est impossible"); -- Si non Message d'erreur
