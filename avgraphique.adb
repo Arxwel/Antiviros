@@ -16,7 +16,6 @@ begin
 		FenetreChoix(f,V,Niv); -- Affichage fenêtre Choix de Partie
 	
 		FenetrePartie(V,Rej,Niv); -- Démarrage de la Partie
-		-- AfficheGrille(V);
 	end loop;
 	Close(f); -- Fermeture de f
 end avgraphique;
