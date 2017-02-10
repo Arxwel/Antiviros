@@ -33,10 +33,13 @@ begin
 																						-- Et que le déplacement est possible
 			Deplacement(V, T_Piece'Val(pad), T_Direction'Value(dp)); -- Si oui on effectue le déplacement
 		else
-			ecrire("Erreur, pièce inexistante dans la grille ou le déplacement est impossible"); -- Si non Message d'erreur
+			A_la_ligne;
+			ecrire_ligne("Erreur, pièce inexistante dans la grille ou le déplacement est impossible"); -- Si non Message d'erreur
 		end if;
 			AfficheGrille(V); -- Affichage de la grille de jeu après déplacement
-	end loop; 
+	end loop;
+	A_la_ligne;
+	ecrire_ligne("Vous avez gagné!"); 
 	Close(f); -- Fermeture du Fichier de Niveaux
 exception -- Traitement des exceptions
 			when Ex_Piece =>

@@ -156,7 +156,7 @@ X,Y :integer;
 
 begin
 		FPartie:=DebutFenetre("Partie : Antiviros",700,400);
-		AjouterBoutonImage(FPartie, "Fond", " " ,0,0,800,500); -- Ajout d'une image de fond
+		AjouterBoutonImage(FPartie, "Fond", " " ,0,0,800,500); -- Ajout d'une imge de fond
 		ChangerImageBouton(FPartie,"Fond","FondHex.xpm");
 		AjouterHorloge(FPartie,"HO","",492,173,75,72);
 		AjouterBoutonImage(FPartie, "HG", "", 570, 173, 35, 35); --Création d'un bouton de direction avec image

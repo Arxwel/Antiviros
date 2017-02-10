@@ -49,19 +49,6 @@ end CreeVectVirus;
 procedure AfficheVectVirus (V : in TV_Virus) is
 -- {} => {Les valeurs du vecteur V sont affichees sur une ligne}
 begin
-
---for j in V'range(2) loop
---		if j = 'B' or j= 'D' or j= 'F' then
---			i:=V'first(1)+1;
---		else
---			i:=V'first(1);
---		end if;
---		while i<=7 loop
---			ecrire(T_Piece'image(V(i,j))); ecrire(",");
---			i:=i+2;
---		end loop;
---	end loop;
-
 	for i in V'range(1) loop
 		for j in V'range(2) loop
 			ecrire(T_Piece'image(V(i,j))); ecrire(" ");  -- Affichage sur une ligne du contenu du vecteur, séparé par un espace
@@ -122,6 +109,7 @@ begin
 			 ecrire(" ");ecrire(Pos2(V(a,j), a, j));
 		end loop;
 	end loop;
+	A_la_ligne;
 end AfficheGrille;
 
 ----------------------------------------------------------------------------------

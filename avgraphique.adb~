@@ -14,7 +14,7 @@ begin
 	FenetreAccueil(F4,Rej);
 
 	Open(f, in_file, "Parties"); -- Ouverture du Fichier Parties
-	-- reset(f, in_file);
+	reset(f, in_file);
 			While Rej loop
 				FenetreChoix(f,V,Niv); -- Affichage fenêtre Choix de Partie
 	
