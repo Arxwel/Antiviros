@@ -10,7 +10,7 @@ begin
 	AjouterBoutonImage(AC, "Fond", " ", 0,0,400,400);
 	AjouterTexte(AC, "CPR", "Copyright 2017 RAKOTOMALALA & PASDELOUP", 40,400,350,30);
 	ChangerEtatBouton(AC,"Fond", arret); -- Affichage d'une image de fond
-	ChangerImageBouton(AC,"Fond","anti.xpm");
+	ChangerImageBouton(AC,"Fond","img/anti.xpm");
 	AjouterBoutonRond(AC,"BoJ","",70,119,99,99); -- CRéation d'un Bouton "Jouer"
 	AjouterBoutonRond(AC,"BoS","",70,312,99,99); -- CRéation d'un Bouton "Score"
 	AjouterBoutonRond(AC,"BoR","",263,119,99,99); -- CRéation d'un Bouton "Règle"
@@ -157,16 +157,16 @@ X,Y :integer;
 begin
 		FPartie:=DebutFenetre("Partie : Antiviros",700,400);
 		AjouterBoutonImage(FPartie, "Fond", " " ,0,0,800,500); -- Ajout d'une image de fond
-		ChangerImageBouton(FPartie,"Fond","FondHex.xpm");
+		ChangerImageBouton(FPartie,"Fond","img/FondHex.xpm");
 		AjouterHorloge(FPartie,"HO","",492,173,75,72);
 		AjouterBoutonImage(FPartie, "HG", "", 570, 173, 35, 35); --Création d'un bouton de direction avec image
-		ChangerImageBouton(FPartie,"HG","HG.xpm");
+		ChangerImageBouton(FPartie,"HG","img/HG.xpm");
 		AjouterBoutonImage(FPartie, "HD", "", 610, 173, 35, 35);
-		ChangerImageBouton(FPartie,"HD","HD.xpm");
+		ChangerImageBouton(FPartie,"HD","img/HD.xpm");
 		AjouterBoutonImage(FPartie, "BG", "", 570, 209, 35, 35);
-		ChangerImageBouton(FPartie,"BG","BG.xpm");
+		ChangerImageBouton(FPartie,"BG","img/BG.xpm");
 		AjouterBoutonImage(FPartie, "BD", "", 610, 209, 35, 35);
-		ChangerImageBouton(FPartie,"BD","BD.xpm");
+		ChangerImageBouton(FPartie,"BD","img/BD.xpm");
 		AjouterBouton(FPartie, "FI", "Quitter", 625, 10, 50, 50);
 		AjouterBouton(FPartie, "RG", "Regles", 570, 10, 50, 50);
 		AjouterBouton(FPartie, "DS", "Derniers Scores", 570, 70, 108, 50);
@@ -259,7 +259,7 @@ begin
 	AjouterBoutonImage(FRG,"ME", " " , 0, 0,500, 299);
 	ChangerEtatBouton(FRG,"ME", arret);
 	--ChangerContenu(FRG,"ME",");
-	ChangerImageBouton(FRG,"ME","RG.xpm");
+	ChangerImageBouton(FRG,"ME","img/RG.xpm");
 	AjouterBouton(FRG, "FI", "Retour au Jeu", 170, 302, 150, 30);
 	FinFenetre(FRG);
 
@@ -275,7 +275,7 @@ a:integer:=1;
 begin
 	FTopScore:=DebutFenetre("Liste de Scores",230,300);
 	AjouterBoutonImage(FTopScore, "Fond", " " ,0,0,800,500);
-	ChangerImageBouton(FTopScore,"Fond","FondHex.xpm");
+	ChangerImageBouton(FTopScore,"Fond","img/FondHex.xpm");
 	AjouterTexte(FTopScore,"LEG","3 Derniers Scores Enregistres : ",2,2,300,20);
 	AjouterTexte(FTopScore,"LEG2","     PSEUDO - SCORE - NIVEAU",2,22,300,20);
 	AjouterTexteAscenseur(FTopScore,"AN", " ", ""  , 60, 60,90, 20);
