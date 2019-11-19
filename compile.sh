@@ -1,5 +1,5 @@
 #!/bin/bash
-ADA_BIB="/home/romain/bibada"
+ADA_BIB="/opt/LibAda"
 ADAX_PATH="$ADA_BIB/x11ada"
 ADA_FORMS="$ADA_BIB/lib"
 ADA_OBJECTS_PATH="$ADAX_PATH:$ADA_BIB"
