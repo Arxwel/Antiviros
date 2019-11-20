@@ -6,11 +6,12 @@ Bout:String(1..3):="   ";
 FRG, FTopScore : TR_Fenetre;
 quitter :boolean := false;
 begin
+	------------------------------- Création des différents Widgets de la fenêtre ----------------------------------------------------
 	AC:=DebutFenetre("Antiviros",400,400); --Création Fenêtre
 	AjouterBoutonImage(AC, "Fond", " ", 0,0,400,400);
 	AjouterTexte(AC, "CPR", "Copyright 2017 RAKOTOMALALA & PASDELOUP", 40,400,350,30);
 	ChangerEtatBouton(AC,"Fond", arret); -- Affichage d'une image de fond
-	ChangerImageBouton(AC,"Fond","img/anti.xpm");
+	ChangerImageBouton(AC,"Fond",ihome);
 	AjouterBoutonRond(AC,"BoJ","",70,119,99,99); -- CRéation d'un Bouton "Jouer"
 	AjouterBoutonRond(AC,"BoS","",70,312,99,99); -- CRéation d'un Bouton "Score"
 	AjouterBoutonRond(AC,"BoR","",263,119,99,99); -- CRéation d'un Bouton "Règle"
@@ -28,19 +29,24 @@ begin
 	ChangerCouleurFond(AC,"Reg", FL_PALEGREEN);
 	ChangerCouleurFond(AC,"Qui", Color(jaune));
 	FinFenetre(AC);
-	MontrerFenetre(AC); --Affichage de la fenetre
+	--------------------------------------- Fin Création des Widgets ---------------------------------------------------------------------
+
+	MontrerFenetre(AC);
+
+	---------------------------------------- Gestion des Interactions --------------------------------------------------------------------
 	While not quitter loop
-	Bout := AttendreBouton(AC); -- On stocke le nom du bouton sur lequel l'utilisateur appuie
+		Bout := AttendreBouton(AC); -- On stocke le nom du bouton sur lequel l'utilisateur appuie
+		
 		if Bout = "BoQ" then --Si il appuie "Quitter"
 			quitter:= true;	-- On quitte la boucle de partie
 		elsif Bout = "BoR" then -- Si il appuie sur "Règles"
-			FenetreRegles(FRG);  -- On ouvre la fenetre de Règle
+			FenetreRegles(FRG);
 			MontrerFenetre(FRG);
 			if AttendreBouton(FRG) = "FI" then
 				CacherFenetre(FRG);
 			end if;
 		elsif Bout = "BoS" then -- Si il appuie sur "Derniers Scores"
-			FenetreTopScore(FTopScore); -- Ouvre la Fenetre des 3 derniers scores
+			FenetreTopScore(FTopScore);
 			MontrerFenetre(FTopScore);
 			if AttendreBouton(FTopScore) = "FI" then
 				CacherFenetre(FTopScore);
@@ -50,24 +56,28 @@ begin
 			quitter:=true;
 		end if;
 		end loop;
+	----------------------------------------------------- Fin des Interactions ---------------------------------------------------------
 		CacherFenetre(AC);
 end FenetreAccueil;
 
-
-----------------------------------------------------------------------------------------
 
 procedure FenetreChoix (f : in out p_Piece_IO.file_type; V : in out TV_Virus; NivChoisi: out String) is
 --{f ouvert, f-=<>, InitialiserFenetres a deja ete fait} => {Creation d'une fenetre de saisi de niveau, qui initialise un vecteur V avec
 --les donnees de f pour le niveau saisi}
 FSaisieChoix : TR_Fenetre;
 begin
+	------------------------------- Création des différents Widgets de la fenêtre --------------------------------------------------------
 	FSaisieChoix:=DebutFenetre("Choix Niveau",400,70); --Création Fenêtre
 	AjouterChamp(FSaisieChoix,"ChampNiv","Niveau (1-20)","",100,10,280,30); --Création d'un champ de Saisie
 	AjouterBouton(FSaisieChoix,"BoutonValider","Valider",100,50,70,30); -- CRéation d'un Bouton "Valider"
 	AjouterTexteAscenseur(FSaisieChoix, "Alert", "", " ",180,50,200,55);
 	FinFenetre(FSaisieChoix);
+	--------------------------------------- Fin Création des Widgets ---------------------------------------------------------------------
 
-	MontrerFenetre(FSaisieChoix); --Affichage de la fenetre
+
+	MontrerFenetre(FSaisieChoix);
+
+	---------------------------------------- Gestion des Interactions --------------------------------------------------------------------
 	loop
 		begin
 	While AttendreBouton(FSaisieChoix) /= "BoutonValider" loop
@@ -84,12 +94,12 @@ begin
 	exit;
 	exception
 		When Constraint_Error =>
-						ChangerContenu(FSaisieChoix,"Alert","Vous n'avez pas saisi un" & Character'val(10) & "entier valide!");
+						ChangerContenu(FSaisieChoix,"Alert","Vous n'avez pas saisi un" & nline & "entier valide!");
 		When End_Error =>
-						ChangerContenu(FSaisieChoix,"Alert","Le nombre saisi est trop" & Character'val(10) & "grand!");
+						ChangerContenu(FSaisieChoix,"Alert","Le nombre saisi est trop" & nline & "grand!");
 	end;
 	end loop;	
-
+	----------------------------------------------------- Fin des Interactions ---------------------------------------------------------
 	CacherFenetre(FSaisieChoix);
 end FenetreChoix;
 
@@ -124,30 +134,6 @@ begin
 	end if;
 end Color;
 
-------------------------------------------------------------------------------------------
-
-function Corrigation (P : in integer) return integer is
--- {} => {Retourne une valeur de P qui correspond mieux à la situation}
-begin
-	if P = 65 then
-		return 1;
-	elsif P = 66 then
-		return 2;
-	elsif P = 67 then
-		return 3;
-	elsif P = 68 then
-		return 4;
-	elsif P = 69 then
-		return 5;
-	elsif P = 70 then
-		return 6;
-	else
-		return 7;
-	end if;
-end Corrigation;
-
-------------------------------------------------------------------------------------------
-
 procedure GenGrille (V: in TV_Virus; FPartie: out TR_Fenetre; SCR: in String) is
 -- {} => {Génère une grille dans la fenêtre de l'interface graphique}
 nombout : string(1..2);
@@ -155,18 +141,19 @@ S: string(1..1);
 X,Y :integer;
 
 begin
+		------------------------------- Création des différents Widgets de l'interface --------------------------------------------------------
 		FPartie:=DebutFenetre("Partie : Antiviros",700,400);
 		AjouterBoutonImage(FPartie, "Fond", " " ,0,0,800,500); -- Ajout d'une image de fond
-		ChangerImageBouton(FPartie,"Fond","img/FondHex.xpm");
+		ChangerImageBouton(FPartie,"Fond",ibgd);
 		AjouterHorloge(FPartie,"HO","",492,173,75,72);
 		AjouterBoutonImage(FPartie, "HG", "", 570, 173, 35, 35); --Création d'un bouton de direction avec image
-		ChangerImageBouton(FPartie,"HG","img/HG.xpm");
+		ChangerImageBouton(FPartie,"HG",ihg);
 		AjouterBoutonImage(FPartie, "HD", "", 610, 173, 35, 35);
-		ChangerImageBouton(FPartie,"HD","img/HD.xpm");
+		ChangerImageBouton(FPartie,"HD",ihd);
 		AjouterBoutonImage(FPartie, "BG", "", 570, 209, 35, 35);
-		ChangerImageBouton(FPartie,"BG","img/BG.xpm");
+		ChangerImageBouton(FPartie,"BG",ibg);
 		AjouterBoutonImage(FPartie, "BD", "", 610, 209, 35, 35);
-		ChangerImageBouton(FPartie,"BD","img/BD.xpm");
+		ChangerImageBouton(FPartie,"BD",ibd);
 		AjouterBouton(FPartie, "FI", "Quitter", 625, 10, 50, 50);
 		AjouterBouton(FPartie, "RG", "Regles", 570, 10, 50, 50);
 		AjouterBouton(FPartie, "DS", "Derniers Scores", 570, 70, 108, 50);
@@ -179,15 +166,15 @@ begin
 		ChangerEtatBouton(FPartie,"Fond", arret);
 		
 		ChangerContenu(FPartie,"SC",SCR);
-		
+		------------------------------- Fin Création des différents Widgets de l'interface -----------------------------------------------------		
 
 		for i in T_Lig'range loop
 			Y:=30+(i-1)*50;
 			for j in T_Col'range loop
 				nombout := T_Col'image(j)(2..2) & Integer'image(i)(2..2);	
-				X:=20+(Corrigation(T_Col'Pos(j))-1)*50;
+				X:=20+((T_Col'Pos(j) mod 64)-1)*50;
 				AjouterBoutonRond(FPartie, nombout, " ", X, Y, 60, 60); --Création des boutons grille
-				if ((i mod 2 = 0) and (Corrigation(T_Col'Pos(j)) mod 2 /= 0)) or ((i mod 2 /=0 ) and (Corrigation(T_Col'Pos(j)) mod 2 =0)) then --Suppression des Cases interdites
+				if ((i mod 2 = 0) and ((T_Col'Pos(j) mod 64) mod 2 /= 0)) or ((i mod 2 /=0 ) and ((T_Col'Pos(j) mod 64) mod 2 =0)) then --Suppression des Cases interdites
 					nombout := T_Col'image(j)(2..2) & Integer'image(i)(2..2);
 					CacherElem(FPartie,nombout); -- On les rend invisibles
 					ChangerEtatBouton(FPartie, nombout, arret);
@@ -205,14 +192,48 @@ begin
 		FinFenetre(FPartie);
 end GenGrille;
 
+
+procedure RefreshGrille(v : in TV_Virus; FPartie : in out TR_Fenetre) is
+--{aucune case de v n'est vide} => {a mis a jour les couleurs des boutons de la fenetre Jeu en fonction de ce qu'il y a dans V}
+j:character;
+nombout:string(1..2);
+begin --MajAffichage
+
+  for i in v'range(1) loop
+    if 0 = i mod 2 then
+      j := T_col'succ(v'first(2));
+    else
+      j := v'first(2);
+    end if;
+    while j <= v'last(2) loop
+     nombout := T_Col'image(j)(2..2) & Integer'image(i)(2..2);
+      ChangerCouleurFond(FPartie,nombout,Color(v(i,j)));
+      if v(i,j)=blanc or v(i,j)=vide then
+        ChangerEtatBouton(FPartie, nombout, arret);
+      else
+        ChangerEtatBouton(FPartie, nombout, marche);
+      end if;
+
+      if j/= T_col'succ(v'last(2)) then
+        j := T_col'succ(j);
+        if j/= T_col'succ(v'last(2)) then
+          j := T_col'succ(j);
+        end if;
+      end if;
+    end loop;
+  end loop;
+end RefreshGrille;
+
+
 ------------------------------------------------------------------------------------------
 
 procedure FenetreSP (Pseudo: out String) is
 --{} => {Création et gestion de la fenetre de Saisie de pseudo}
 FSP : TR_Fenetre;
+P : Unbounded_String;
 begin
 	FSP:=DebutFenetre("Saisie Pseudo",400,70); --Création Fenêtre
-	AjouterChamp(FSP,"Pseudo","Votre Pseudo","(3characters)",100,10,280,30); --Création d'un champ de Saisie
+	AjouterChamp(FSP,"Pseudo","Votre Pseudo" & nline & "(10 chars max)","",100,10,280,30); --Création d'un champ de Saisie
 	AjouterBouton(FSP,"BoutonValider","Valider",100,50,70,30); -- CRéation d'un Bouton "Valider"
 	AjouterTexteAscenseur(FSP, "Alert2", "", " ",180,50,200,50);
 	FinFenetre(FSP);
@@ -220,15 +241,21 @@ begin
 	MontrerFenetre(FSP); --Affichage de la fenetre
 	loop
 		begin
+			if AttendreBouton(FSP) = "BoutonValider" then
+				P:= To_Unbounded_String(consulterContenu(FSP, "Pseudo"));
 
-			While AttendreBouton(FSP) /= "BoutonValider" loop
-				ecrire(" ");
-			end loop;		
-			Pseudo:= consulterContenu(FSP, "Pseudo");
-			exit;
-		exception
-			when Constraint_Error =>
-				ChangerContenu(FSP,"Alert2","Le pseudo saisi est trop" & Character'val(10) & "grand!");		
+				if(Length(P) = 0) then
+					ChangerContenu(FSP,"Alert2","Le pseudo doit comporter au" & nline & "moins un caractere !");	
+				elsif(Length(P) > 10) then
+					ChangerContenu(FSP,"Alert2","Le pseudo saisi est trop" & nline & "grand !");	
+				else 
+					for i in 1..10-Length(P) loop
+					Append(P, " ");
+					end loop ;
+					Pseudo := To_String(P);
+					exit;
+				end if;
+			end if;		
 		end;
 	end loop;
 	
@@ -237,16 +264,27 @@ end FenetreSP;
 
 procedure TopScore (SCR: in String; Niv : in String) is
 --{} => { Ecrit dans un fichier le score de l'utilisateur avec son pseudo et le niveau joué}
-Pseudo:String(1..3);
-f: text_io.file_type;
+Pseudo: String(1..10);
+f: p_score_IO.file_type;
+s: TR_Score;
 begin
-	Open(f, in_file, "score.data");
+	open(f, append_file, fscore);
+	s.score := Natural'value(SCR);
+	s.niveau := Natural'value(Niv);
 	FenetreSP(Pseudo);
-	reset(f, append_file);
-	Put(f, Pseudo & ' ');
-	Put(f,SCR & ' ');
-	Put_line(f, Niv);
+	s.pseudo := Pseudo;
+	write(f,s);
 	close(f);
+exception
+    when Name_Error =>
+		ecrire_ligne("Fichier de score non trouvé. Création...");
+		create(f, out_file, fscore);
+		s.score := Natural'value(SCR);
+		s.niveau := Natural'value(Niv);
+		FenetreSP(Pseudo);
+		s.pseudo := Pseudo;
+		write(f,s);
+		close(f);
 end TopScore;
 
 ------------------------------------------------------------------------------------------
@@ -258,8 +296,7 @@ begin
 	FRG:=DebutFenetre("Regles",500,300);
 	AjouterBoutonImage(FRG,"ME", " " , 0, 0,500, 299);
 	ChangerEtatBouton(FRG,"ME", arret);
-	--ChangerContenu(FRG,"ME",");
-	ChangerImageBouton(FRG,"ME","img/RG.xpm");
+	ChangerImageBouton(FRG,"ME",irg);
 	AjouterBouton(FRG, "FI", "Retour au Jeu", 170, 302, 150, 30);
 	FinFenetre(FRG);
 
@@ -269,41 +306,33 @@ end FenetreRegles;
 
 procedure FenetreTopScore(FTopScore : out TR_Fenetre) is
 --{f créé et rempli} => {Crée une fenêtre avec les trois derniers scores saisis} 
-f: text_io.file_type;
-SC:String(1..10);
-a:integer:=1;
+f: p_score_IO.file_type;
+SC:TR_score;
+str_pseudo: Unbounded_String:= To_Unbounded_String ("") ;
+str_score: Unbounded_String:= To_Unbounded_String ("") ;
+str_niveau: Unbounded_String:= To_Unbounded_String ("") ;
 begin
-	FTopScore:=DebutFenetre("Liste de Scores",230,300);
-	AjouterBoutonImage(FTopScore, "Fond", " " ,0,0,800,500);
-	ChangerImageBouton(FTopScore,"Fond","img/FondHex.xpm");
-	AjouterTexte(FTopScore,"LEG","3 Derniers Scores Enregistres : ",2,2,300,20);
-	AjouterTexte(FTopScore,"LEG2","     PSEUDO - SCORE - NIVEAU",2,22,300,20);
-	AjouterTexteAscenseur(FTopScore,"AN", " ", ""  , 60, 60,90, 20);
-	AjouterTexteAscenseur(FTopScore,"AN2", " ", " " ,60,150,90, 20);
-	AjouterTexteAscenseur(FTopScore,"AN3", " ", " " ,60,240,90, 20);
-	ChangerCouleurFond(FTopScore,"AN",FL_COL1);
-	ChangerCouleurFond(FTopScore,"AN2",FL_COL1);
-	ChangerCouleurFond(FTopScore,"AN3",FL_COL1);
+	FTopScore:=DebutFenetre("Liste de Scores",259,400);
+	AjouterTexte(FTopScore,"LEGP","PSEUDO",2,2,85,20);
+	AjouterTexte(FTopScore,"LEGS","SCORE",87,2,85,20);
+	AjouterTexte(FTopScore,"LEGN","Niveau",172,2,85,20);
+	AjouterTexteAscenseur(FTopScore,"APseudo", " ", ""  , 2, 20,85, 370);
+	AjouterTexteAscenseur(FTopScore,"AScore", " ", ""  , 87, 20,85, 370);
+	AjouterTexteAscenseur(FTopScore,"ANiveau", " ", ""  , 172, 20,85, 370);
 	ChangerEtatBouton(FTopScore,"Fond", arret);
-	AjouterBouton(FTopScore, "FI", "Retour au Jeu", 40, 297, 150, 30);
+	AjouterBouton(FTopScore, "FI", "Retour au Jeu", 50, 400, 150, 30);
 	FinFenetre(FTopScore);
-	Open(f, in_file, "score.data"); -- Ouverture du fichier contenant le score
-	get(f,SC);
-	While not end_of_file(f) loop --Détermination de la taille du fichier
-		a:=a+1;
-		get(f, SC);
-	end loop;
-	reset(f, in_file);
-	for i in 1..a-3 loop -- On lit tous les éléments sauf les 3 derniers
-	get(f, SC);
-	end loop;
-	get(f, SC);
-	ChangerContenu(FTopScore,"AN",SC);
-	get(f, SC);
-	ChangerContenu(FTopScore,"AN2",SC);
-	get(f, SC);
-	ChangerContenu(FTopScore,"AN3",SC);
+	open(f, in_file, fscore);
+	while not end_of_file(f) loop
+    read(f,SC);
+    str_pseudo := str_pseudo & To_Unbounded_String(SC.pseudo & nline);
+	str_score := str_score & To_Unbounded_String(Natural'image(SC.score) & nline);
+	str_niveau := str_niveau & To_Unbounded_String(Natural'image(SC.niveau) & nline);
+  	end loop;
 	close(f);
+	ChangerContenu(FTopScore,"APseudo", To_String(str_pseudo));
+	ChangerContenu(FTopScore,"AScore", To_String(str_score));
+	ChangerContenu(FTopScore,"ANiveau", To_String(str_niveau));
 end FenetreTopScore;
 
 ------------------------------------------------------------------------------------------
@@ -331,7 +360,7 @@ Jd : T_Col;
 Dir: T_direction;
 BT_Coul : String(1..2);
 SCR : integer:=0;
-c:integer:=1;
+Current : T_Piece := vide;
 HeureDeb,HeureFin : Time;
 begin
 	GenGrille(V,FPartie,Integer'image(0));
@@ -354,31 +383,26 @@ begin
 			if AttendreBouton(FTopScore) = "FI" then
 				CacherFenetre(FTopScore);
 			end if;
-		elsif (BT_Coul = "HG") or (BT_Coul = "HD") or (BT_Coul = "BG") or (BT_Coul = "BD") then -- Si il appuie sur un bouton de direction sans avoir appuyé sur une couleur
-			ChangerContenu(FPartie,"ME","Selectionnez d'abord une piece"); -- On affiche un message
+		elsif (BT_Coul = "HG") or (BT_Coul = "HD") or (BT_Coul = "BG") or (BT_Coul = "BD") then
+			if (Current = vide) then
+				ChangerContenu(FPartie,"ME","Selectionnez d'abord une piece"); -- On affiche un message
+			else
+				Dir := T_direction'value(BT_Coul); -- On récupère la valeur de la direction
+				if Possible(V, Current, Dir) then -- On vérifie si le déplacement est possible
+					deplacement(V, Current, Dir); -- si oui on effectue le déplacement
+					SCR := SCR+1; -- Incrémentation du score
+					RefreshGrille(V,FPartie);
+				else 
+					SCR := SCR+2; -- Incrémentation du score
+					ChangerContenu(FPartie,"ME","Deplacement impossible (+2)"); -- Si déplacement impossible affichage d'un message
+				end if;
+				ChangerContenu(FPartie,"SC",Integer'Image(SCR));
+			end if;
 		else -- Si il appuie sur un bouton de couleur
 			Jd := BT_Coul(1); -- On récupère les coordonnées du bouton
 			Id := T_Lig'value(BT_Coul(2..2));
-			ChangerCouleurFond(FPartie,"SA", Color(V(Id,Jd)));
-			BT_Coul := AttendreBouton(FPartie); -- On attend l'appuie d'un bouton par l'utilisateur
-			if (BT_Coul = "HG") or (BT_Coul = "HD") or (BT_Coul = "BG") or (BT_Coul = "BD") then -- Si le bouton est une direction
-				Dir := T_direction'value(BT_Coul); -- On récupère la valeur de la direction
-				If Possible(V, V(Id,Jd), Dir) then -- On vérifie si le déplacement est possible
-					deplacement(V, V(Id, Jd), Dir); -- si oui on effectue le déplacement
-					SCR := SCR+1; -- Incrémentation du score
-					CacherFenetre(FPartie);
-					GenGrille(V,FPartie,Integer'Image(SCR));
-					MontrerFenetre(FPartie);
-				else 
-					SCR := SCR+2; -- Incrémentation du score
-					CacherFenetre(FPartie);
-					GenGrille(V,FPartie,Integer'Image(SCR));
-					MontrerFenetre(FPartie);
-					ChangerContenu(FPartie,"ME","Deplacement impossible (+2)"); -- Si déplacement impossible affichage d'un message
-				end if;
-			else
-				ChangerContenu(FPartie,"ME","Selectionnez une direction"); -- Si le bouton n'est pas une direction on affiche un message
-			end if;
+			Current := V(Id,Jd); -- On met à jour la couleur actuelle
+			ChangerCouleurFond(FPartie,"SA", Color(Current));
 		end if;
 	end loop;
 	If Gueri(V) then -- Si on sort de la boucle partie car on a gagné

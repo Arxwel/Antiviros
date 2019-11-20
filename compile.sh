@@ -5,6 +5,7 @@ ADA_FORMS="$ADA_BIB/lib"
 ADA_OBJECTS_PATH="$ADAX_PATH:$ADA_BIB"
 ADA_INCLUDE_PATH="$ADAX_PATH:$ADA_BIB"
 LD_LIBRARY_PATH="$ADA_FORMS"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/LibAda/lib
 export ADA_OBJECTS_PATH ADA_INCLUDE_PATH LD_LIBRARY_PATH
 #LARGS="-L/usr/X11R6/lib -largs -lforms -largs ${ADAX_PATH}/var.o -largs -lX11 -largs -lXm -largs -lXt"
 LARGS="-L$ADA_FORMS -largs -lforms -largs ${ADAX_PATH}/var.o -largs -lX11"

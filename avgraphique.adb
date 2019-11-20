@@ -13,7 +13,7 @@ begin
 	InitialiserFenetres; -- Initialisation du mode graphique
 	FenetreAccueil(F4,Rej);
 
-	Open(f, in_file, "Parties"); -- Ouverture du Fichier Parties
+	Open(f, in_file, fparties); -- Ouverture du Fichier Parties
 	-- reset(f, in_file);
 			While Rej loop
 				FenetreChoix(f,V,Niv); -- Affichage fenêtre Choix de Partie

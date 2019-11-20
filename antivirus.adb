@@ -11,7 +11,7 @@ V : TV_Virus;
 
 begin
 
-	Open(f, in_file, "Parties"); -- Ouverture du Fichier contenant les différents niveaux
+	Open(f, in_file, "data/Parties"); -- Ouverture du Fichier contenant les différents niveaux
 	ecrire("N° config ? : "); lire(nb); -- Lecture du Numéro de Niveau désiré
 	CreeVectVirus(f, nb, V);  -- Création du vecteur contenant les pièces du niveau et leur emplacement
 	 --AfficheVectVirus(V); -- Affichage des valeurs du vecteur
