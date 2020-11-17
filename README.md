@@ -6,8 +6,6 @@
 
 Antiviros is a computer version of the [Antivirus board game](https://www.smartgames.eu/uk/one-player-games/anti-virus) made in Ada. At the moment, it has only 20 challenges available.
 
-
-
 It was created as a school project during the first year of my Associate's degree at IUT2 Grenoble.
 
 ## Installation
@@ -40,8 +38,6 @@ The project use a custom graphical library based on x11, and some other librarie
 
 To play the game, download the content of this repository. To compile the program you must have GNAT compiler installed on your system.
 
-
-
 1. Update LD_LIBRARY_PATH to add our custom libraries
    
    ```
@@ -71,41 +67,4 @@ To play the game, download the content of this repository. To compile the progra
    The first one is the textual version and can be played in a terminal. 
    
    The second one is the graphical version.
-
-
-
-        __Note__: When you open a new terminal, you must do the export specified in step 1.         before playing.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   __Note__: When you open a new terminal, you must do the export specified in step 1. before playing.
